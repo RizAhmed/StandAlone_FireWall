@@ -7,7 +7,7 @@ FIREWALL_IF="eno1"
 #host interface
 HOST_IF="enp3s2"
 IP_HOST="192.168.10.100"
-IP_FIREWALL"192.168.10.13"
+IP_FIREWALL="192.168.10.13"
 
 ETH0="eth0"
 ETH1="eth1"

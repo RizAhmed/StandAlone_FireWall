@@ -2,19 +2,25 @@
 
 #user configurable section
 IPT="iptables"
-ETH0="eth0"
-ETH1="eth1"
+#firewall interface
+FIREWALL_IF="eno1"
+#host interface
+HOST_IF="enp3s2"
+IP_HOST="192.168.10.100"
+IP_FIREWALL="192.168.10.13"
+
 LB_INTERFACE="lo"
 LOOPBACK_IP="127.0.0.1"
 
 #allowed ports
 ALLOW_TCP="22"
 ALLOW_UDP="53"
-ALLOW_ICMP="8"
-
 #deny ports
 DENY_TCP="0"
 DENY_UDP="0"
+
+#allowed ICMP types
+ALLOW_ICMP=("2" "8")
 
 #shortcut to resetting the default policy
 if [ "$1" = "reset" ]
@@ -41,3 +47,27 @@ then
 fi
 
 #firewall implementation section
+
+# set default policy to DROP
+$IPT --policy INPUT DROP
+$IPT --policy OUTPUT DROP
+$IPT --policy FORWARD DROP
+
+#DROP packets
+
+#drop all packets destined for the firewall host from outside
+$IPT -A INPUT -i $FIREWALL_IF -d $IP_FIREWALL -j DROP
+
+#do not accept any packets with a source address from outside matching
+#your internal network
+$IPT -A FORWARD -s 192.168.10.0/24 -i $FIREWALL_IF -j DROP
+
+#ACCEPT packets
+#inbound/outbound TCP packets on allowed ports
+$IPT -A FORWARD -p TCP -m multiport --sport $ALLOW_TCP -m state --state NEW,ESTABLISHED -j ACCEPT
+$IPT -A FORWARD -p TCP -m multiport --dport $ALLOW_TCP -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#inbound/outbound UDP packets on allowed ports
+$IPT -A FORWARD -p UDP -m multiport --sport $ALLOW_UDP -j ACCEPT
+$IPT -A FORWARD -p UDP -m multiport --dport $ALLOW_UDP -j ACCEPT
+#inbound/outbound ICMP packets based on type numbers

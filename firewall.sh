@@ -53,15 +53,21 @@ $IPT --policy INPUT DROP
 $IPT --policy OUTPUT DROP
 $IPT --policy FORWARD DROP
 
-#inbound/outbound TCP packets on allowed ports
-
-
-#inbound/outbound UDP packets on allowed ports
-
-#inbound/outbound ICMP packets based on type numbers
+#DROP packets
 
 #drop all packets destined for the firewall host from outside
+$IPT -A INPUT -i $FIREWALL_IF -d $IP_FIREWALL -j DROP
 
 #do not accept any packets with a source address from outside matching
 #your internal network
-#firewall implementation section
+$IPT -A FORWARD -s 192.168.10.0/24 -i $FIREWALL_IF -j DROP
+
+#ACCEPT packets
+#inbound/outbound TCP packets on allowed ports
+$IPT -A FORWARD -p TCP -m multiport --sport $ALLOW_TCP -m state --state NEW,ESTABLISHED -j ACCEPT
+$IPT -A FORWARD -p TCP -m multiport --dport $ALLOW_TCP -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#inbound/outbound UDP packets on allowed ports
+$IPT -A FORWARD -p UDP -m multiport --sport $ALLOW_UDP -j ACCEPT
+$IPT -A FORWARD -p UDP -m multiport --dport $ALLOW_UDP -j ACCEPT
+#inbound/outbound ICMP packets based on type numbers

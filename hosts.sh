@@ -6,15 +6,15 @@
 ################################################################################
 
 # Network Interface Details For Firewall
-Firewall_NIC="eno01"
-Firewall_Internal_NIC="enp3s2"
+Primary_NIC="eno01"
+Secondary_NIC="enp3s2"
 
 Firewall_HOST_IP="192.168.10.13"
 Internal_HOST_IP="192.168.10.2"
 
 if [ "$1" = "firewall" ]
  then
-   sudo ifconfig $Firewall_Internal_NIC $Firewall_HOST_IP up
+   sudo ifconfig $Primary_NIC $Firewall_HOST_IP up
    echo "1" >/proc/sys/net/ipv4/ip_forward
 
    #New Routing rule for the current network
@@ -22,11 +22,16 @@ if [ "$1" = "firewall" ]
 
    #Routing rule for the the new internal network
    route add -net 192.168.10.0/24 gw $Firewall_HOST_IP
+
+   iptables -t nat -A POSTROUTING -o $Primary_NIC -j MASQUERADE
   #statements
 fi
 
 if ["$1" = "internal"]
  then
-   sudo ifconfig $Internal_NIC $Internal_HOST_IP up
+   sudo ifconfig $Primary_NIC down
+   sudo ifconfig $Secondary_NIC $Internal_HOST_IP up
+
+   route add default gw $Firewall_HOST_IP 
   #statements
 fi

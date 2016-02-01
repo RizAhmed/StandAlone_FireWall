@@ -20,7 +20,7 @@ DENY_TCP="0"
 DENY_UDP="0"
 
 #allowed ICMP types
-ALLOW_ICMP=("2" "8")
+ALLOW_ICMP=("3" "8")
 
 #shortcut to resetting the default policy
 if [ "$1" = "reset" ]

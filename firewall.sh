@@ -9,18 +9,18 @@ HOST_IF="enp3s2"
 IP_HOST="192.168.10.100"
 IP_FIREWALL="192.168.10.13"
 
-ETH0="eth0"
-ETH1="eth1"
 LB_INTERFACE="lo"
 LOOPBACK_IP="127.0.0.1"
 
 #allowed ports
 ALLOW_TCP="22"
 ALLOW_UDP="53"
-ALLOW_ICMP="8"
 #deny ports
 DENY_TCP="0"
 DENY_UDP="0"
+
+#allowed ICMP types
+ALLOW_ICMP=("2" "8")
 
 #shortcut to resetting the default policy
 if [ "$1" = "reset" ]

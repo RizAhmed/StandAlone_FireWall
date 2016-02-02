@@ -71,3 +71,10 @@ $IPT -A FORWARD -p TCP -m multiport --dport $ALLOW_TCP -m state --state NEW,ESTA
 $IPT -A FORWARD -p UDP -m multiport --sport $ALLOW_UDP -j ACCEPT
 $IPT -A FORWARD -p UDP -m multiport --dport $ALLOW_UDP -j ACCEPT
 #inbound/outbound ICMP packets based on type numbers
+for i in "${ALLOW_ICMP[@]}"
+do
+  :
+  $IPT -A FORWARD -p ICMP -i $FIREWALL_IF -o $HOST_IF --icmp-type $i -j ACCEPT
+  $IPT -A FORWARD -p ICMP -i $HOST_IF -o $FIREWALL_IF --icmp-type $i -j ACCEPT
+  echo "allowed icmp service $1"
+done

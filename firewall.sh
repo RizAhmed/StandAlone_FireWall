@@ -13,8 +13,8 @@ LB_INTERFACE="lo"
 LOOPBACK_IP="127.0.0.1"
 
 #allowed ports
-ALLOW_TCP="22"
-ALLOW_UDP="53"
+ALLOW_TCP="22,53,68,80,443"
+ALLOW_UDP="22,53,68"
 #deny ports
 DENY_TCP="0"
 DENY_UDP="0"
@@ -76,5 +76,5 @@ do
   :
   $IPT -A FORWARD -p ICMP -i $FIREWALL_IF -o $HOST_IF --icmp-type $i -j ACCEPT
   $IPT -A FORWARD -p ICMP -i $HOST_IF -o $FIREWALL_IF --icmp-type $i -j ACCEPT
-  echo "allowed icmp service $1"
+  echo "allowed icmp service $i"
 done

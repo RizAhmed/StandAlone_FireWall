@@ -13,14 +13,11 @@ LB_INTERFACE="lo"
 LOOPBACK_IP="127.0.0.1"
 
 #allowed ports
-ALLOW_TCP="22,53,68,80,443"
-ALLOW_UDP="22,53,68"
-#deny ports
-DENY_TCP="0"
-DENY_UDP="0"
+ALLOW_TCP="20,21,22,53,68,80,443"
+ALLOW_UDP="20,21,22,53,68"
 
 #allowed ICMP types
-ALLOW_ICMP=("3" "8")
+ALLOW_ICMP=("0" "3" "8")
 
 #shortcut to resetting the default policy
 if [ "$1" = "reset" ]

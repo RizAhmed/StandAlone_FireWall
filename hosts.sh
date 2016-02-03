@@ -24,6 +24,7 @@ if [ "$1" = "firewall" ]
    route add -net 192.168.10.0/24 gw $Firewall_HOST_IP
 
    iptables -t nat -A POSTROUTING -o $Primary_NIC -j MASQUERADE
+   iptables -t nat -A PREROUTING -i $Primary_NIC -j DNAT --to-destination $Internal_HOST_IP
   #statements
 fi
 

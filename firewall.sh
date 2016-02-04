@@ -20,11 +20,11 @@ LB_INTERFACE="lo"
 LOOPBACK_IP="127.0.0.1"
 
 #allowed ports
-ALLOW_TCP="22"
-ALLOW_UDP="53"
+#ALLOW_TCP="22"
+#ALLOW_UDP="53"
 #deny ports
-DENY_TCP="0"
-DENY_UDP="0"
+#DENY_TCP="0"
+#DENY_UDP="0"
 
 #allowed ICMP types
 ALLOW_ICMP=("3" "0" "8")
@@ -155,8 +155,6 @@ $IPT -t nat -A POSTROUTING -o $HOST_IF -p tcp --dport 22 -j SNAT --to-source $IP
 # allow ftp forwarding
 $IPT -t nat -A PREROUTING -i $FIREWALL_IF -p tcp -d $IP_EXT_FIREWALL --dport 21 -j DNAT --to-destination $IP_HOST:21
 $IPT -t nat -A POSTROUTING -o $HOST_IF -p tcp --dport 21 -j SNAT --to-source $IP_FIREWALL
-
-echo "I am hetre"
 
 # FTP, SSH minimum delay, ftp maximum throughput
 $IPT -A PREROUTING -t mangle -p tcp --sport ssh -j TOS --set-tos Minimize-Delay

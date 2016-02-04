@@ -10,7 +10,7 @@ Primary_NIC="eno1"
 Secondary_NIC="enp3s2"
 
 Firewall_HOST_IP="192.168.10.13"
-Internal_HOST_IP="192.168.10.2"
+Internal_HOST_IP="192.168.10.12"
 
 if [ "$1" = "firewall" ]
  then
